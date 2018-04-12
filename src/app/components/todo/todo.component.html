@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+    <h2 class="text-secondary">¡ToDo List!</h2>
+</div>
+<div class="col">
+    <div class="input-group mt-4">
+        <span class="input-group-btn">
+            <button class="btn btn-outline-secondary"
+                    (click)="updateStatusTodo()">
+          <i class="fas fa-angle-double-down"></i>
+        </button>
+      </span>
+        <input type="text"
+               class="form-control"
+               placeholder="What needs to be done?"
+               (keydown.enter)="addTodo($event.target)">
+    </div>
+</div>
+
+<div class="col">
+    <ul class="list-group mt-4">
+        <li class="list-group-item list-group-item-action d-flex justify-content-between"
+            *ngFor="let todo of listTodo"
+            (dblclick)="modifyTodo = !modifyTodo">
+            <span *ngIf="!modifyTodo"
+                  class="cursor-hover"
+                  [class.text-success]="todo.status"
+                  (click)="updateTodo(todo, todo.status)">
+      <i [ngClass]="todo.status ? 'fas fa-check-circle': 'far fa-circle'"></i>
+    </span>
+            <span *ngIf="!modifyTodo"
+                  [class.todoCompleted]="todo.status">{{ todo.name }}</span>
+
+            <input class="form-control"
+                   *ngIf="modifyTodo"
+                   type="text"
+                   value="{{ todo.name }}"
+                   (keydown.enter)="updateTodoEdit(todo, $event.target.value)">
+
+            <span *ngIf="!modifyTodo"
+                  class="text-danger cursor-hover"
+                  (click)="deleteTodo(todo)">
+        <i class="far fa-trash-alt"></i>
+    </span>
+        </li>
+    </ul>
+</div>
+
+<div *ngIf="showMenu"
+     class="row mt-4">
+    <div class="col d-flex justify-content-start align-self-center">
+        <span class="align-bottom">{{cantTodoIncomplete}} items left</span>
+    </div>
+    <div class="col d-flex justify-content-center align-self-center">
+        <div class="btn justify-content-md-center"
+             role="group"
+             aria-label="Basic example">
+            <button type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="getTodoAll();">All</button>
+            <button type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="getTodoFilter(false)">Active</button>
+            <button type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="getTodoFilter(true)">Completed</button>
+        </div>
+    </div>
+    <div class="col d-flex justify-content-end align-self-center">
+        <button *ngIf="cantTodoComplete > 0"
+                type="button"
+                class="btn btn-outline-secondary btn-sm"
+                (click)="clearTodoCompleted()"> Clear completed</button>
+    </div>
+</div>
